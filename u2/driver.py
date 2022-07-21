@@ -8,13 +8,11 @@ import os
 import time
 import uiautomator2 as u2
 from settings import Setting
-# from common.logging import log
 from common.log import log
-from adb_command import ADB
-from datetime import datetime
+from u2.adb_command import ADB
 
 
-class Device(u2.Device, ADB):
+class Device(u2.Device):
     """
     Android设备类，封装uiautomator2的Device类
     """
@@ -126,7 +124,7 @@ class Device(u2.Device, ADB):
         通过向上滑动解锁
         :return:
         """
-        width, height = self.get_screen_size().split('x')
+        width, height = ADB().adb_get_screen_size().split('x')
         width_x1 = int(width)*0.5
         width_y1 = int(height)*0.7
         width_x2 = int(width)*0.5

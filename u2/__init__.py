@@ -7,7 +7,6 @@ import os
 import sys
 import time
 from settings import Setting
-# from common.logging import log
 from common.log import log
 from common.assert_des import insert_assert
 
@@ -440,13 +439,21 @@ class Element(object):
                             v=self.v,
                             method_name=sys._getframe().f_code.co_name))
 
-    def click_exists(self, timeout=1, screenshots=Setting.click_screenshots):
+    def click_exists(self, timeout=1) -> bool:
         """
-        The element is not clicked until it exists
+        元素存在则点击该元素，最多等待时间timeout，超时后元素未存在则抛异常
         """
 
         global driver
         return driver(**self.kwargs).click_exists(timeout=timeout)
+
+    def click_gone(self) -> bool:
+        """
+        进行点击操作，当前点击元素不在当前页面，则return True，否则return False
+        """
+
+        global driver
+        return driver(**self.kwargs).click_gone()
 
     def click_more(self, sleep=.01, times=3):
         """
@@ -468,6 +475,14 @@ class Element(object):
 
         global driver
         return driver(**self.kwargs).exists(timeout=timeout)
+
+    def not_exists(self, timeout=0):
+        """
+        check if the object exists in current window.
+        """
+
+        global driver
+        return not driver(**self.kwargs).exists(timeout=timeout)
 
     def set_text(self, text):
         """

@@ -8,9 +8,9 @@ import os
 import pytest
 from py.xml import html
 from common.log import log
-from u2.driver import Device
-# from u2.driver.D import Device.ad
 from settings import Setting
+from u2.driver import Device
+from u2.adb_command import ADB
 
 
 # 项目目录配置
@@ -134,7 +134,7 @@ def capture_screenshot(case_name):
     if Setting.image_path == '':
         Setting.image_path = image_file_path
     if os.path.exists(image_path):
-        Device.adb_screencap_local(project_image_path=image_file_path)
+        ADB().adb_screencap_local(project_image_path=image_file_path)
     else:
         log.warn("report/image 路径不存在，取消截图操作")
     return image_file_path
@@ -164,14 +164,14 @@ def u2_driver():
     """
     global driver
     driver = Device.connect()
-    d = Device(driver)
-    if not d.check_screen_status():
-        d.wake_up_screen()
-        if d.check_screen_lock_status():
-            d.swipe_up_to_unlock_device()
+    adb = ADB()
+    if not adb.adb_check_screen_status():
+        adb.adb_wake_up_screen()
+        if adb.adb_check_screen_lock_status():
+            Device(driver).swipe_up_to_unlock_device()
     else:
-        if d.check_screen_lock_status():
-            d.swipe_up_to_unlock_device()
+        if adb.adb_check_screen_lock_status():
+            Device(driver).swipe_up_to_unlock_device()
         else:
             pass
 

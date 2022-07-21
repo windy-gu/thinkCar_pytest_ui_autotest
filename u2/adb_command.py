@@ -5,9 +5,10 @@
 # @File    : adb_command.py
 
 import os
+import time
+from datetime import datetime
 from common.log import log
 from settings import Setting
-import time, datetime
 
 
 class ADB:
@@ -49,7 +50,7 @@ class ADB:
             if activity is None:
                 log.warn("未指定apk_path路径，请使用page.start_app()方法来启动应用")
             else:
-                self.adb_shell('am start -n ' + apk_name + '/' + activity)
+                self.adb_shell(f'am start -n {apk_name} / {activity}')
                 log.info(f"adb命令 - 启动apk：{apk_name}")
         else:
             if activity is None:
@@ -57,8 +58,8 @@ class ADB:
                 if activity == '':
                     log.warn("activity为空，请使用page.start_app()方法来启动应用")
             else:
-                self.adb_shell('am start -n ' + apk_name + '/' + activity)
-                log.info(f"adb命令 - 启动apk：{apk_name}")
+                self.adb_shell(f'am start -n {apk_name} / {activity}')
+                log.info(f'adb命令 - 启动apk：{apk_name}')
 
     def adb_stop_app(self, apk_name):
         """
@@ -126,7 +127,7 @@ class ADB:
         :param computer_file_path:
         :return:
         """
-        os.popen(Setting.adb_path + ' pull {} {}'.format(device_file_path, computer_file_path))
+        os.popen(Setting.adb_path + f' pull {device_file_path} {computer_file_path}')
 
     def adb_push_file(self, device_file_path, computer_file_path):
         """
@@ -135,7 +136,7 @@ class ADB:
         :param computer_file_path:
         :return:
         """
-        os.popen(Setting.adb_path + ' push {} {}'.format(computer_file_path, device_file_path))
+        os.popen(Setting.adb_path + f' push {computer_file_path} {device_file_path}')
 
     def adb_refresh_gallery(self, file_uri: str) -> None:
         """
@@ -165,7 +166,7 @@ class ADB:
         :param apk_file_path:
         :return:
         """
-        install_info = os.popen(Setting.adb_path + ' install -r {}'.format(apk_file_path)).read()
+        install_info = os.popen(Setting.adb_path + f' install -r {apk_file_path}').read()
         log.info(f"adb 安装应用信息：{install_info}")
         time.sleep(5)
         log.info(f"adb 安装应用：{apk_file_path}")
@@ -229,14 +230,12 @@ class ADB:
             time.sleep(2)
             log.info(f'异常截图已保存在：{project_image_path}')
 
-    def get_screen_size(self) -> str:
+    def adb_get_screen_size(self) -> str:
         """
         获取屏幕尺寸大小Size:720x1600
         :return:
         """
         return self.adb_shell("wm size").read().replace(' ', '').split(':')[-1]
-
-
 
 
 class AAPT:
