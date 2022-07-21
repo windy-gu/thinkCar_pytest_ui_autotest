@@ -44,7 +44,7 @@ class Log():
         # self.logger.addHandler(FILE_HANDLER)
         if "pytest" not in sys.modules:  # 目前在pytest中会存在重复打印日志的情况
             self.logger.addHandler(CONSOLE_HANDLER)
-
+        time.sleep(0.1)
         if level == 'info':
             self.logger.info(Fore.GREEN + message + Style.RESET_ALL)
         elif level == 'debug':

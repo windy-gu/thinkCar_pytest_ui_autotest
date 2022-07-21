@@ -39,55 +39,6 @@ class Device(u2.Device, ADB):
             log.info(f'设备信息:[ {d.info} ]')
             return Device(d)
 
-    @staticmethod
-    def check_apk_exits(pkg_name: str) -> bool:
-        """
-        检查apk应用是否在当前设备应用列表中
-        :param pkg_name:
-        :return:
-        """
-        apk_check_str = os.popen(Setting.adb_path + ' shell pm list packages ' + pkg_name).read()
-        if pkg_name in apk_check_str:
-            log.info(f'当前设备存在应用：{pkg_name}')
-            return True
-        else:
-            log.warn(f'当前设备不存在应用：{pkg_name}')
-            return False
-
-    def check_screen_status(self) -> bool:
-        """
-        检查手机屏幕亮屏状态,ON亮屏/OFF息屏
-        :return:  bool Ture亮屏/False息屏
-        """
-        status = os.popen(Setting.adb_path + " shell dumpsys power | grep 'Display Power'").read().split('=')[-1].replace('\n', '')
-        log.info(f'{status}')
-        if status == 'ON':
-            log.info(f'当前设备屏幕状态：亮屏')
-            return True
-        else:
-            log.info(f'当前设备屏幕状态：息屏')
-            return False
-
-    def check_screen_lock_status(self) -> bool:
-        """
-        检查手机屏幕锁屏状态,true 锁屏状态/false 非锁屏
-        :return:  bool Ture锁屏/False非锁屏
-        """
-        status = os.popen(Setting.adb_path + " shell dumpsys window policy | grep isStatusBarKeyguard").read().split('=')[-1].replace('\n', '')
-        if status == 'true':
-            log.info('当前设备屏幕锁屏状态：锁屏')
-            return True
-        else:
-            log.info('当前设备屏幕锁屏状态：非锁屏')
-            return False
-
-    def wake_up_screen(self):
-        """
-        唤醒/关闭屏幕
-        :return:
-        """
-        os.popen(Setting.adb_path + " shell input keyevent 26")
-
     def sleep(self, seconds: float = 1):
         """
         等待时间
@@ -107,17 +58,6 @@ class Device(u2.Device, ADB):
         output, exit_code = self.shell(command)
         log.info(f'{Setting.adb_path} shell output:\n {output}')
         log.info(f'{Setting.adb_path} shell exitCode:[ {exit_code} ]')
-
-    def open_url(self, url: str):
-        """
-        通过Android内置参数，根据内容打开相应的Activity
-        url -- 浏览器
-        tel:13800138000 -- 拨号程序
-        geo:38.383838,126.126126 -- 打开地图定位
-        :param url:
-        :return:
-        """
-        self.adb_shell(f'am start -a android.intent.action.VIEW -d "{url}"')
 
     def start_app(self, package_name, activity=None):
         """
@@ -168,49 +108,6 @@ class Device(u2.Device, ADB):
         self.set_fastinput_ime(False)  # 切换成正常的输入法
         log.info('切换为正常的输入法')
 
-    def adb_input(self, text: str):
-        """
-        通过adb shell input text 进行内容输入，不限于字母、数字、汉字等
-        :param text:    输入文本内容
-        :return:
-        """
-        self.adb_shell(f'input text [ {text} ]')
-
-    def adb_refresh_gallery(self, file_uri: str) -> None:
-        """
-        上传图片至系统图库后，手动广播通知系统图库刷新
-        :param file_uri:
-        """
-        log.info('ADB广播刷新系统图库')
-        if file_uri.startswith('/'):
-            file_uri = file_uri[1:]
-        self.adb_shell(
-            fr'am broadcast -a android.intent.action.MEDIA_SCANNER_SCAN_FILE -d file:///{file_uri}')
-
-    @staticmethod
-    def adb_screencap_local(project_image_path: str = None, path: str = None) -> None:
-        """
-        设备本地截图
-        :param path:
-        :return:
-        """
-        if not path:
-            current_time = datetime.now().strftime('%Y%m%d%H%M%S')
-            filename = f'screenshot_{current_time}.png'
-            path = f'./sdcard/{filename}'
-        if Setting.device_id == '':
-            # log.info("无device_id模式")
-            # 直接将截图保存在当前工程目录test_report/time/image目录下
-            os.popen(Setting.adb_path + f' shell screencap -p > {project_image_path}')
-            time.sleep(2)
-            log.info(f'异常截图已保存，文件路径：{project_image_path}')
-        else:
-            # log.info("device_id模式")
-            # log.info(Setting.adb_path + ' -s ' + Setting.device_id + f' shell screencap {path}')
-            os.popen(Setting.adb_path + ' -s ' + Setting.device_id + f' shell screencap -p > {project_image_path}')
-            time.sleep(2)
-            log.info(f'异常截图已保存在：{project_image_path}')
-
     def get_toast_message(self, wait_timeout=10, cache_timeout=10, default=None):
         """
         获取toast信息内容
@@ -224,27 +121,17 @@ class Device(u2.Device, ADB):
         log.info(f'toast:[ {toast_msg} ]')
         return toast_msg
 
-    def get_screen_size(self) -> str:
-        """
-        获取屏幕尺寸大小Size:720x1600
-        :return:
-        """
-        return os.popen(Setting.adb_path + " shell wm size").read().replace(' ', '').split(':')[-1]
-
     def swipe_up_to_unlock_device(self):
         """
         通过向上滑动解锁
         :return:
         """
         width, height = self.get_screen_size().split('x')
-        # log.info(type(width))
-        # log.info(type(height))
         width_x1 = int(width)*0.5
         width_y1 = int(height)*0.7
         width_x2 = int(width)*0.5
         width_y2 = int(height)*0.7
         self.swipe_points([(width_x1, width_y1), (width_x2, width_y2)], 1)
-        # self.swipe_ext('up', scale=0.8)
 
 
 def get_device_id():

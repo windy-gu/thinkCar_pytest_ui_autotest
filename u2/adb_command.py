@@ -7,7 +7,7 @@
 import os
 from common.log import log
 from settings import Setting
-import time
+import time, datetime
 
 
 class ADB:
@@ -137,13 +137,38 @@ class ADB:
         """
         os.popen(Setting.adb_path + ' push {} {}'.format(computer_file_path, device_file_path))
 
+    def adb_refresh_gallery(self, file_uri: str) -> None:
+        """
+        上传图片至系统图库后，手动广播通知系统图库刷新
+        :param file_uri:
+        """
+        log.info('ADB广播刷新系统图库')
+        if file_uri.startswith('/'):
+            file_uri = file_uri[1:]
+        self.adb_shell(
+            fr'am broadcast -a android.intent.action.MEDIA_SCANNER_SCAN_FILE -d file:///{file_uri}')
+
+    def adb_open_url(self, url: str):
+        """
+        通过Android内置参数，根据内容打开相应的Activity
+        url -- 浏览器
+        tel:13800138000 -- 拨号程序
+        geo:38.383838,126.126126 -- 打开地图定位
+        :param url:
+        :return:
+        """
+        self.adb_shell(f'am start -a android.intent.action.VIEW -d "{url}"')
+
     def adb_install_apk(self, apk_file_path):
         """
         通过adb install 命令安装apk应用
         :param apk_file_path:
         :return:
         """
-        os.popen(Setting.adb_path + ' install -r {}'.format(apk_file_path))
+        install_info = os.popen(Setting.adb_path + ' install -r {}'.format(apk_file_path)).read()
+        log.info(f"adb 安装应用信息：{install_info}")
+        time.sleep(5)
+        log.info(f"adb 安装应用：{apk_file_path}")
 
     def adb_uninstall_apk(self, apk_name):
         """
@@ -151,15 +176,67 @@ class ADB:
         :param apk_name:
         :return:
         """
-        os.popen(Setting.adb_path + ' uninstall {}'.format(apk_name))
+        uninstall_info = os.popen(Setting.adb_path + ' uninstall {}'.format(apk_name)).read()
+        log.info(f"adb 卸载应用信息：{uninstall_info}")
+        time.sleep(3)
+        log.info(f"adb 卸载应用：{apk_name}")
 
     def adb_wake_up_screen(self):
         """
-        唤醒/关闭屏幕
+        通过adb，判断屏幕状态，根据状态，进行 唤醒/关闭 屏幕操作
         :return:
         """
-        self.adb_shell("input keyevent 26")
-        # os.popen(Setting.adb_path + " shell input keyevent 26")
+        status = os.popen(Setting.adb_path + " shell dumpsys power | grep 'Display Power'").read().split('=')[-1].replace('\n', '')
+        # log.info(f'{status}')
+        if status == 'ON':
+            log.info(f'当前设备屏幕状态：亮屏')
+            self.adb_shell("input keyevent 26")
+            log.info(f"adb 关闭屏幕 操作")
+        else:
+            log.info(f'当前设备屏幕状态：息屏')
+            self.adb_shell("input keyevent 26")
+            log.info(f"adb 唤醒屏幕 操作")
+
+    def adb_input_text(self, text: str):
+        """
+        通过adb shell input text 进行内容输入，不限于字母、数字、汉字等
+        :param text:    输入文本内容
+        :return:
+        """
+        self.adb_shell(f'input text [ {text} ]')
+        log.info(f"adb input text操作，内容：[{text}]")
+
+    def adb_screencap_local(self, project_image_path: str = None, path: str = None) -> None:
+        """
+        设备本地截图
+        :param path:
+        :return:
+        """
+        if not path:
+            current_time = datetime.now().strftime('%Y%m%d%H%M%S')
+            filename = f'screenshot_{current_time}.png'
+            path = f'./sdcard/{filename}'
+        if Setting.device_id == '':
+            # log.info("无device_id模式")
+            # 直接将截图保存在当前工程目录test_report/time/image目录下
+            os.popen(Setting.adb_path + f' shell screencap -p > {project_image_path}')
+            time.sleep(2)
+            log.info(f'异常截图已保存，文件路径：{project_image_path}')
+        else:
+            # log.info("device_id模式")
+            # log.info(Setting.adb_path + ' -s ' + Setting.device_id + f' shell screencap {path}')
+            os.popen(Setting.adb_path + ' -s ' + Setting.device_id + f' shell screencap -p > {project_image_path}')
+            time.sleep(2)
+            log.info(f'异常截图已保存在：{project_image_path}')
+
+    def get_screen_size(self) -> str:
+        """
+        获取屏幕尺寸大小Size:720x1600
+        :return:
+        """
+        return self.adb_shell("wm size").read().replace(' ', '').split(':')[-1]
+
+
 
 
 class AAPT:
@@ -183,8 +260,11 @@ if __name__ == '__main__':
     # aapt = AAPT()
     # aapt.aapt_get_activity('/Users/gxf/Downloads/Diag_7.1_2_debug\ \(1\).apk ')
     adb = ADB()
-    adb.adb_clear_app('com.us.thinkdiag.plus')
-    time.sleep(1)
-    adb.adb_start_app('com.us.thinkdiag.plus', 'com.zhiyicx.thinksnsplus.modules.guide.GuideActivityNew')
-    time.sleep(5)
+    # adb.adb_uninstall_apk('com.us.thinkdiag.plus')
+    # adb.adb_install_apk('/Users/gxf/Downloads/Diag_7.1_2_debug\ \(1\).apk ')
+    adb.adb_wake_up_screen()
+    # adb.adb_clear_app('com.us.thinkdiag.plus')
+    # time.sleep(1)
+    # adb.adb_start_app('com.us.thinkdiag.plus', 'com.zhiyicx.thinksnsplus.modules.guide.GuideActivityNew')
+    # time.sleep(5)
     # adb.adb_stop_app('com.us.thinkdiag.plus')
