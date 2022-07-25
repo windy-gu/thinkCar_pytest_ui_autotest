@@ -169,10 +169,10 @@ def u2_driver():
     if not adb.adb_check_screen_status():
         adb.adb_wake_up_screen()
         if adb.adb_check_screen_lock_status():
-            Device(driver).swipe_up_to_unlock_device()
+            Device(driver).swipe_direction(style='UP')
     else:
         if adb.adb_check_screen_lock_status():
-            Device(driver).swipe_up_to_unlock_device()
+            Device(driver).swipe_direction(style='UP')
         else:
             pass
 

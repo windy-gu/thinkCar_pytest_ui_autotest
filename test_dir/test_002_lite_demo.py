@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 # @Author  : Windy.Gu
 # @Software: PyCharm
-# @Time    : 2022/7/1 17:24
-# @File    : test_001_u2_demo.py
+# @Time    : 2022/7/25 10:24
+# @File    : test_002_lite_demo.py
 
 import os
 import pytest
@@ -68,6 +68,11 @@ def login_user(u2_driver: Device, login_email: str, password: str):
 
 
 def logout_user(u2_driver: Device):
+    """
+    用户登出流程
+    :param u2_driver:
+    :return:
+    """
     home_page = HomePage(u2_driver)
     common_page = CommandPage(u2_driver)
     settings_page = SettingsPage(u2_driver)
@@ -75,7 +80,7 @@ def logout_user(u2_driver: Device):
     if common_page.back_button.exists():
         log.info('进入到设置页面:成功')
         while not settings_page.logout_button.exists():
-            u2_driver.swipe_up_to_unlock_device(style='UP')
+            u2_driver.swipe_direction(style='UP')
 
         settings_page.logout_button.click()
         if settings_page.logout_confirm.click_gone():

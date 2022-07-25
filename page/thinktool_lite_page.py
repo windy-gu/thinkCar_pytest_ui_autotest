@@ -45,7 +45,6 @@ class SettingsPage(Page):
     logout_button = Element(resourceId="com.us.thinktool:id/tv_left_text", text="退出登錄", describe='退出登錄_btn')
     logout_cancel = Element(resourceId="com.us.thinktool:id/button2", describe='登出取消_btn')
     logout_confirm = Element(resourceId="com.us.thinktool:id/button1", describe='登出确定_btn')
-    ...
 
 
 class CommandPage(Page):

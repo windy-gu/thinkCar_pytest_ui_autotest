@@ -253,17 +253,3 @@ class AAPT:
         """
         activity_str = os.popen(self.aapt + ' dump badging ' + apk_path + ' | grep launchable-activity').read().split("name='")[-1].split("'  ")[0]
         return activity_str
-
-
-if __name__ == '__main__':
-    # aapt = AAPT()
-    # aapt.aapt_get_activity('/Users/gxf/Downloads/Diag_7.1_2_debug\ \(1\).apk ')
-    adb = ADB()
-    # adb.adb_uninstall_apk('com.us.thinkdiag.plus')
-    # adb.adb_install_apk('/Users/gxf/Downloads/Diag_7.1_2_debug\ \(1\).apk ')
-    adb.adb_wake_up_screen()
-    # adb.adb_clear_app('com.us.thinkdiag.plus')
-    # time.sleep(1)
-    # adb.adb_start_app('com.us.thinkdiag.plus', 'com.zhiyicx.thinksnsplus.modules.guide.GuideActivityNew')
-    # time.sleep(5)
-    # adb.adb_stop_app('com.us.thinkdiag.plus')

@@ -468,7 +468,7 @@ class Element(object):
             time.sleep(sleep)
             driver.touch.up(x, y)
 
-    def exists(self, timeout=3):
+    def exists(self, timeout=1):
         """
         check if the object exists in current window.
         """
@@ -508,7 +508,7 @@ class Element(object):
 
     def send_keys(self, text, clear=True):
         """
-        alias of set_text
+        alias of set_text | 清除文本&重新赋值
         :param text:
         :param clear:
         """
@@ -530,7 +530,7 @@ class Element(object):
 
     def clear_text(self):
         """
-        Clear the text
+        Clear the text | 清除元素文本内容
         """
         global driver
         driver(**self.kwargs).clear()
@@ -548,7 +548,7 @@ class Element(object):
 
     def get_text(self):
         """
-        get element text
+        get element text | 获取元素文本内容
         """
         global driver
         get_text = driver(**self.kwargs).get_text()

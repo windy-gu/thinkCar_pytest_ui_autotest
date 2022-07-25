@@ -119,9 +119,9 @@ class Device(u2.Device):
         log.info(f'toast:[ {toast_msg} ]')
         return toast_msg
 
-    def swipe_up_to_unlock_device(self, style: str = 'UP'):
+    def swipe_direction(self, style: str = 'UP'):
         """
-        通过向上滑动解锁
+        滑动执行方向，UP：向上活动；DOWN：向下滑动；UNLOCK：滑动解锁。
         :return:
         """
         width, height = ADB().adb_get_screen_size().split('x')
@@ -134,6 +134,10 @@ class Device(u2.Device):
             self.swipe(y_width, y_height, x_width, x_height)
         elif style == 'DOWN':
             self.swipe(x_width, x_height, y_width, y_height, )
+        elif style == 'UNLOCK':
+            self.swipe(y_width, y_height, x_width, x_height)
+        else:
+            log.warn("滑动类型不存在")
 
 
 def get_device_id():
@@ -187,13 +191,3 @@ def close_app(driver, apk=None):
         driver.app_stop(apk)
     else:
         driver.app_stop(Setting.apk_name)
-
-
-if __name__ == '__main__':
-    # status_code = os.system(Setting.adb_path + " devices")
-    # print(status_code)
-    execute_result = os.popen(Setting.adb_path + " shell dumpsys window policy | grep isStatusBarKeyguard").read().split('=')[-1]
-    # execute_result = os.popen(Setting.adb_path + " shell wm size").read().replace(' ', '').split(':')[-1]
-    print(execute_result)
-    # w, h = execute_result.split('x')
-    # print(w, h)
