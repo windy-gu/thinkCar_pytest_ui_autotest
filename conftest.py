@@ -128,16 +128,17 @@ def capture_screenshot(case_name):
     file_name = case_name.split("/")[-1]
     new_report_dir = new_report_time()
     if new_report_dir is None:
-        raise RuntimeError('没有初始化测试目录')
-    image_path = os.path.join(REPORT_DIR, new_report_dir, "image")
-    image_file_path = os.path.join(REPORT_DIR, new_report_dir, "image", file_name)
-    if Setting.image_path == '':
-        Setting.image_path = image_file_path
-    if os.path.exists(image_path):
-        ADB().adb_screencap_local(project_image_path=image_file_path)
+        log.warn('没有初始化测试报告目录')
     else:
-        log.warn("report/image 路径不存在，取消截图操作")
-    return image_file_path
+        image_path = os.path.join(REPORT_DIR, new_report_dir, "image")
+        image_file_path = os.path.join(REPORT_DIR, new_report_dir, "image", file_name)
+        if Setting.image_path == '':
+            Setting.image_path = image_file_path
+        if os.path.exists(image_path):
+            ADB().adb_screencap_local(project_image_path=image_file_path)
+        else:
+            log.warn("report/image 路径不存在，取消截图操作")
+        return image_file_path
 
 
 def new_report_time():

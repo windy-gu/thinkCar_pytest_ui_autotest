@@ -468,7 +468,7 @@ class Element(object):
             time.sleep(sleep)
             driver.touch.up(x, y)
 
-    def exists(self, timeout=0):
+    def exists(self, timeout=3):
         """
         check if the object exists in current window.
         """

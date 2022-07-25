@@ -204,8 +204,8 @@ class ADB:
         :param text:    输入文本内容
         :return:
         """
-        self.adb_shell(f'input text [ {text} ]')
-        log.info(f"adb input text操作，内容：[{text}]")
+        self.adb_shell(f'input text {text}')
+        log.info(f"adb input text操作，内容：{text}")
 
     def adb_screencap_local(self, project_image_path: str = None, path: str = None) -> None:
         """

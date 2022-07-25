@@ -119,17 +119,21 @@ class Device(u2.Device):
         log.info(f'toast:[ {toast_msg} ]')
         return toast_msg
 
-    def swipe_up_to_unlock_device(self):
+    def swipe_up_to_unlock_device(self, style: str = 'UP'):
         """
         通过向上滑动解锁
         :return:
         """
         width, height = ADB().adb_get_screen_size().split('x')
-        width_x1 = int(width)*0.5
-        width_y1 = int(height)*0.7
-        width_x2 = int(width)*0.5
-        width_y2 = int(height)*0.7
-        self.swipe_points([(width_x1, width_y1), (width_x2, width_y2)], 1)
+        width = width.replace('\n', '')
+        x_height = 0.2 * int(height)
+        x_width = 0.5 * int(width)
+        y_height = 0.8 * int(height)
+        y_width = 0.5 * int(width)
+        if style == 'UP':
+            self.swipe(y_width, y_height, x_width, x_height)
+        elif style == 'DOWN':
+            self.swipe(x_width, x_height, y_width, y_height, )
 
 
 def get_device_id():
