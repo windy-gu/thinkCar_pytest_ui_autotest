@@ -46,6 +46,9 @@ class DiagHomePage(Page):
     more_info_skip = Element(resourceId="com.us.thinktool:id/button2", describe='更多资讯-跳过_btn')
     more_info_confirm = Element(resourceId="com.us.thinktool:id/button1", describe='更多资讯-确定_btn')
     PDF_button = Element(text="PDF", describe='PDF_btn')
+    quit_tips_confirm_button = Element(resourceId="com.us.thinktool:id/positiveButton", describe='提示资讯-确定_btn')
+    quit_tips_cancel_button = Element(resourceId="com.us.thinktool:id/negativeButton", describe='提示资讯-取消_btn')
+    takeout_tips_confirm_button = Element(resourceId="com.us.thinktool:id/button1", describe='取回接头提示资讯-确定_btn')
 
 
 class InputMethodPage(Page):

@@ -57,10 +57,10 @@ def test_001_lite(u2_driver: Device, pkg_name='com.us.thinktool'):
     success_dict = {}
     failure_dict = {}
 
-    # 此处使用while循环中的元素当前页面一定不存在，知道满足检测数量后自动跳出循环
+    # 此处使用while循环中的元素当前页面一定不存在，直到满足检测数量后自动跳出循环
     while not diag_home_page.fast_test.exists():
         log.info('进入到：车型诊断检测项 - 检测流程')
-        for i in range(6):  # 此处的range数量需要根据当前页面最多可显示的数量来决定
+        for i in range(5):  # 此处的range数量需要根据当前页面最多可显示的数量来决定
             scan_name_text_element = f'resourceId="com.us.thinktool:id/tv_systemname", instance={i}, describe="检测项_btn"'
             scan_statue_text_element = f'resourceId="com.us.thinktool:id/tv_systemstatus", instance={i}, describe="检测状态_btn"'
             scan_name_text_use = Element(**str_transform_dict(scan_name_text_element))
@@ -98,6 +98,17 @@ def test_001_lite(u2_driver: Device, pkg_name='com.us.thinktool'):
     diag_home_page.PDF_button.click()
     diag_home_page.wait(10)
 
+    # 一直退出返回到首页
+    i = 0
+    while i < 5:
+        common_page.wait(1)
+        common_page.back_button.click()
+        i += 1
+
+    diag_home_page.quit_tips_confirm_button.click()
+    # diag_home_page.quit_tips_confirm_button.click()
+    diag_home_page.takeout_tips_confirm_button.click()
+
     # 输入查询指定车型，并弹出输入法弹窗
     # diag_home_page.search_button.click()
     # diag_home_page.search_input.click()
@@ -109,12 +120,12 @@ def test_001_lite(u2_driver: Device, pkg_name='com.us.thinktool'):
     # ime_page.finish_button.click()
 
     # common_page.back_button.click()
-    # diag_home_page.wait(1)
-    # common_page.back_button.click()
+    diag_home_page.wait(1)
+    common_page.back_button.click()
 
     # 进行登出操作流程
-    # if home_page.setting_btn.exists():
-    #     logout_user(u2_driver)
+    if home_page.setting_btn.exists():
+        logout_user(u2_driver)
 
 
 def login_user(u2_driver: Device, login_email: str, password: str):
