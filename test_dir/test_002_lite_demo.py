@@ -59,13 +59,14 @@ def test_001_lite(u2_driver: Device, pkg_name='com.us.thinktool'):
 
     # 此处使用while循环中的元素当前页面一定不存在，知道满足检测数量后自动跳出循环
     while not diag_home_page.fast_test.exists():
-        for i in range(6):
+        log.info('进入到：车型诊断检测项 - 检测流程')
+        for i in range(6):  # 此处的range数量需要根据当前页面最多可显示的数量来决定
             scan_name_text_element = f'resourceId="com.us.thinktool:id/tv_systemname", instance={i}, describe="检测项_btn"'
             scan_statue_text_element = f'resourceId="com.us.thinktool:id/tv_systemstatus", instance={i}, describe="检测状态_btn"'
             scan_name_text_use = Element(**str_transform_dict(scan_name_text_element))
             scan_statue_text_use = Element(**str_transform_dict(scan_statue_text_element))
-            scan_name_text = scan_name_text_use.get_text()
-            scan_statue_text = scan_statue_text_use.get_text()
+            scan_name_text = scan_name_text_use.get_text()  # 获取检测项名称
+            scan_statue_text = scan_statue_text_use.get_text()  # 获取检测异常数量，其中正常为''
             if scan_statue_text != '':
                 if scan_name_text in failure_dict.keys():
                     continue
@@ -88,6 +89,14 @@ def test_001_lite(u2_driver: Device, pkg_name='com.us.thinktool'):
 
     log.info('检测成功项目：' + str(success_dict))
     log.warn('检测异常项目：' + str(failure_dict))
+
+    # 生产检测PDF报告
+    diag_home_page.report_button.click()
+    # 此处的具体信息待添加
+    diag_home_page.info_add_confirm.click()
+    diag_home_page.more_info_confirm.click()
+    diag_home_page.PDF_button.click()
+    diag_home_page.wait(10)
 
     # 输入查询指定车型，并弹出输入法弹窗
     # diag_home_page.search_button.click()

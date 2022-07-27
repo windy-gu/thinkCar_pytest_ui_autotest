@@ -39,6 +39,13 @@ class DiagHomePage(Page):
     system_choose = Element(text="系統選擇", describe='系統選擇_btn')
     scan_name = Element(resourceId="com.us.thinktool:id/tv_systemname", describe='检测项_btn')
     scan_status = Element(resourceId="com.us.thinktool:id/tv_systemstatus", describe='检测状态_btn')
+    clear_code_button = Element(text="清碼", describe='清碼_btn')
+    report_button = Element(text="報告", describe='報告_btn')
+    info_add_skip = Element(resourceId="com.us.thinktool:id/button2", describe='信息添加-跳过_btn')
+    info_add_confirm = Element(resourceId="com.us.thinktool:id/button1", describe='信息添加-确定_btn')
+    more_info_skip = Element(resourceId="com.us.thinktool:id/button2", describe='更多资讯-跳过_btn')
+    more_info_confirm = Element(resourceId="com.us.thinktool:id/button1", describe='更多资讯-确定_btn')
+    PDF_button = Element(text="PDF", describe='PDF_btn')
 
 
 class InputMethodPage(Page):
