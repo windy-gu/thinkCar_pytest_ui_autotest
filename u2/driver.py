@@ -119,17 +119,19 @@ class Device(u2.Device):
         log.info(f'toast:[ {toast_msg} ]')
         return toast_msg
 
-    def swipe_direction(self, style: str = 'UP'):
+    def swipe_direction(self, style: str = 'UP', log_print: bool = True, print_defined: str = ''):
         """
         滑动执行方向，UP：向上活动；DOWN：向下滑动；UNLOCK：滑动解锁。
         :return:
         """
         width, height = ADB().adb_get_screen_size().split('x')
         width = width.replace('\n', '')
-        x_height = 0.2 * int(height)
+        x_height = 0.1 * int(height)
         x_width = 0.5 * int(width)
-        y_height = 0.8 * int(height)
+        y_height = 0.9 * int(height)
         y_width = 0.5 * int(width)
+        if log_print:
+            log.info(f'{print_defined} 执行页面滑动操作，操作类型：{style}')
         if style == 'UP':
             self.swipe(y_width, y_height, x_width, x_height)
         elif style == 'DOWN':

@@ -70,3 +70,10 @@ class ElementException(PoiumException):
     Element exception
     """
     pass
+
+
+class ElementNoFindException(PoiumException):
+    """
+    Element exception
+    """
+    pass

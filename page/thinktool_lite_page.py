@@ -21,6 +21,24 @@ class HomePage(Page):
 class DiagHomePage(Page):
     search_button = Element(resourceId='com.us.thinktool:id/ts_fragment_quit', describe='搜索_btn')
     search_input = Element(resourceId='com.us.thinktool:id/searchView', describe='搜索_input')
+    car_demo_button = Element(resourceId='com.us.thinktool:id/car_main_demo', describe='演示_btn')
+    car_obd_button = Element(resourceId='com.us.thinktool:id/car_main_eobd', describe='OBD&IM_btn')
+    auto_diag_button = Element(resourceId='com.us.thinktool:id/tool_car_main_autosearch', describe='智慧诊断_btn')
+    report_history_button = Element(resourceId='com.us.thinktool:id/tool_car_main_histroy', describe='历史记录_btn')
+    diag_button = Element(resourceId="com.us.thinktool:id/right_button_text", text="診斷", describe='診斷_btn')
+    bluetooth_connect_button = Element(resourceId="com.us.thinktool:id/button2", describe='蓝牙连接_btn')
+    demo_confirm_button = Element(resourceId="com.us.thinktool:id/button1", describe='演示_btn')
+    Ford_list = Element(text="福特", describe='福特_btn')
+    Chevrolet_list = Element(text="雪佛蘭", describe='雪佛蘭_btn')
+    VW_list = Element(text="大眾", describe='大眾_btn')
+    Honda_list = Element(text="本田", describe='本田_btn')
+    Toyota_list = Element(text="豐田", describe='豐田_btn')
+    Nissan_list = Element(text="日產", describe='日產_btn')
+    fast_test = Element(text="快速測試", describe='快速測試_btn')
+    system_scan = Element(text="系統掃描", describe='系統掃描_btn')
+    system_choose = Element(text="系統選擇", describe='系統選擇_btn')
+    scan_name = Element(resourceId="com.us.thinktool:id/tv_systemname", describe='检测项_btn')
+    scan_status = Element(resourceId="com.us.thinktool:id/tv_systemstatus", describe='检测状态_btn')
 
 
 class InputMethodPage(Page):

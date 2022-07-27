@@ -553,15 +553,17 @@ class Element(object):
         global driver
         get_text = driver(**self.kwargs).get_text()
         if self.describe is not None:
-            log.info("操作类型：{method_name}，定位_type：{k}， 定位_value：{v}， 描述：{describe}".
+            log.info("操作类型：{method_name}，文本内容：{get_text} [ 定位_type：{k}， 定位_value：{v}， 描述：{describe} ]".
                      format(k=self.k,
                             v=self.v,
+                            get_text=get_text,
                             method_name=sys._getframe().f_code.co_name,
                             describe=self.describe))
         else:
-            log.info("操作类型：{method_name}，定位_type：{k}， 定位_value：{v}".
+            log.info("操作类型：{method_name}，文本内容：{get_text} [ 定位_type：{k}， 定位_value：{v} ]".
                      format(k=self.k,
                             v=self.v,
+                            get_text=get_text,
                             method_name=sys._getframe().f_code.co_name))
         return get_text
 

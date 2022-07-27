@@ -33,3 +33,23 @@ def change_html(source_file_path: str, target_file_path: str):
                     wf.write(i)
     # 删除文件
     os.remove(source_file_path)
+
+
+def str_transform_dict(temp_str: str) -> dict:
+    """
+    将符合key=value类型的str内容，转换为{key:value} 输出
+    :param temp_str:
+    :return:
+    """
+    temp_dict = {}
+    temp_str_temp = temp_str.replace('"', '')
+    temp_split_list = temp_str_temp.split(',')
+    for i in range(len(temp_split_list)):
+        temp_str_1 = temp_split_list[i].replace(' ', '')
+        k, v = temp_str_1.split('=')
+        if len(v) == 1:
+            if 48 <= ord(v) <= 57:
+                v = int(v)
+        temp_dict[k] = v
+    return temp_dict
+

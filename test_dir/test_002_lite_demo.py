@@ -9,10 +9,14 @@ import pytest
 from u2.driver import Device
 from u2.adb_command import ADB
 from common.log import log
+from u2 import Element
+from common.util import str_transform_dict
+from common.exceptions import ElementNoFindException
 from page.thinktool_lite_page import HomePage, DiagHomePage, InputMethodPage, CommandPage, LoginPage, SettingsPage
 
 
 def test_001_lite(u2_driver: Device, pkg_name='com.us.thinktool'):
+    """用户登录，诊断车型搜索，退出登录"""
     # 实例化页面相关参数
     u2_driver.start_app(pkg_name)
     home_page = HomePage(u2_driver)
@@ -26,23 +30,82 @@ def test_001_lite(u2_driver: Device, pkg_name='com.us.thinktool'):
     if login_page.login_button.exists():
         login_user(u2_driver, login_email='408563133@qq.com', password='123456')
 
+    # 进入到诊断页面
     home_page.diag_button.click()
-    diag_home_page.search_button.click()
-    diag_home_page.search_input.click()
-    diag_home_page.wait(1)
-    diag_home_page.search_input.set_text('123333')
-    # adb.adb_input_text('baic')
-    diag_home_page.wait(1)
-    print(ime_page.finish_button.exists())
-    ime_page.delete_button.click()
-    ime_page.finish_button.click()
-    common_page.back_button.click()
-    diag_home_page.wait(1)
-    common_page.back_button.click()
+
+    # 滑动找到：演示btn
+    # while not diag_home_page.car_demo_button.exists():
+    #     u2_driver.swipe_direction(style='UP')
+    if not diag_home_page.car_demo_button.exists():
+        for i in range(10):
+            u2_driver.swipe_direction(style='UP', print_defined='当前页面中不存在需要操作的元素')
+            if diag_home_page.car_demo_button.exists():
+                break
+            if i == 9:
+                log.error(f'执行循环滑动{i+1}次，未定位到操作元素')
+                raise ElementNoFindException()
+
+    # 操作流程：演示 - 诊断 - 演示 - 选择车型
+    diag_home_page.car_demo_button.click()
+    diag_home_page.diag_button.click()
+    diag_home_page.demo_confirm_button.click()
+    diag_home_page.wait(5)
+    diag_home_page.Ford_list.click()
+    diag_home_page.fast_test.click()
+    diag_home_page.wait(20)
+
+    success_dict = {}
+    failure_dict = {}
+
+    # 此处使用while循环中的元素当前页面一定不存在，知道满足检测数量后自动跳出循环
+    while not diag_home_page.fast_test.exists():
+        for i in range(6):
+            scan_name_text_element = f'resourceId="com.us.thinktool:id/tv_systemname", instance={i}, describe="检测项_btn"'
+            scan_statue_text_element = f'resourceId="com.us.thinktool:id/tv_systemstatus", instance={i}, describe="检测状态_btn"'
+            scan_name_text_use = Element(**str_transform_dict(scan_name_text_element))
+            scan_statue_text_use = Element(**str_transform_dict(scan_statue_text_element))
+            scan_name_text = scan_name_text_use.get_text()
+            scan_statue_text = scan_statue_text_use.get_text()
+            if scan_statue_text != '':
+                if scan_name_text in failure_dict.keys():
+                    continue
+                else:
+                    failure_dict[scan_name_text] = scan_statue_text
+            else:
+                if scan_name_text in success_dict.keys():
+                    continue
+                else:
+                    success_dict[scan_name_text] = scan_statue_text
+
+            if len(success_dict) + len(failure_dict) >= 17:
+                log.info("检测项长度17，跳出内循坏！")
+                break
+
+        if len(success_dict) + len(failure_dict) >= 17:
+            log.info("检测项长度17，跳出外循坏！")
+            break
+        u2_driver.swipe_direction(style='UP')
+
+    log.info('检测成功项目：' + str(success_dict))
+    log.warn('检测异常项目：' + str(failure_dict))
+
+    # 输入查询指定车型，并弹出输入法弹窗
+    # diag_home_page.search_button.click()
+    # diag_home_page.search_input.click()
+    # diag_home_page.wait(1)
+    # diag_home_page.search_input.set_text('123333')
+    # # adb.adb_input_text('baic')
+    # diag_home_page.wait(1)
+    # ime_page.delete_button.click()
+    # ime_page.finish_button.click()
+
+    # common_page.back_button.click()
+    # diag_home_page.wait(1)
+    # common_page.back_button.click()
 
     # 进行登出操作流程
-    if home_page.setting_btn.exists():
-        logout_user(u2_driver)
+    # if home_page.setting_btn.exists():
+    #     logout_user(u2_driver)
 
 
 def login_user(u2_driver: Device, login_email: str, password: str):
