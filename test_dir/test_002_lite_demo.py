@@ -16,7 +16,9 @@ from page.thinktool_lite_page import HomePage, DiagHomePage, InputMethodPage, Co
 
 
 def test_001_lite(u2_driver: Device, pkg_name='com.us.thinktool'):
-    """用户登录，诊断车型搜索，退出登录"""
+    """
+    用户登录，诊断车型搜索，退出登录
+    """
     # 实例化页面相关参数
     u2_driver.start_app(pkg_name)
     home_page = HomePage(u2_driver)

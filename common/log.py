@@ -83,5 +83,6 @@ class Log():
     def print(self, message):
         self._print_console('print', message)
 
+# level:DEBUG  INFO  WARNING  ERROR  CRITICAL
 
 log = Log()

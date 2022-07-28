@@ -75,17 +75,20 @@ def pytest_runtest_makereport(item):
             else:
                 case_name = case_path
             screen_img_path = capture_screenshot(case_name)
-            img_path = "/image/" + case_name.split("/")[-1]
-            if os.path.exists(screen_img_path):  # 判断图片文件是否存在，存在则添加日志报告中
-                # 此处使用绝对路径获取图片文件
-                # html = '<div><img src="file://%s" alt="screenshot" style="width:304px;height:228px;" ' \
-                #        'onclick="window.open(this.src)" align="right"/></div>' % screen_img_path
+            if screen_img_path is False:
+                pass
+            else:
+                img_path = "/image/" + case_name.split("/")[-1]
+                if os.path.exists(screen_img_path):  # 判断图片文件是否存在，存在则添加日志报告中
+                    # 此处使用绝对路径获取图片文件
+                    # html = '<div><img src="file://%s" alt="screenshot" style="width:304px;height:228px;" ' \
+                    #        'onclick="window.open(this.src)" align="right"/></div>' % screen_img_path
 
-                # 此处使用相对路径获取图片文件
-                html = '<div><img src=".%s" alt="screenshot" style="width:304px;height:228px;" ' \
-                       'onclick="window.open(this.src)" align="right"/></div>' % img_path
+                    # 此处使用相对路径获取图片文件
+                    html = '<div><img src=".%s" alt="screenshot" style="width:304px;height:228px;" ' \
+                           'onclick="window.open(this.src)" align="right"/></div>' % img_path
 
-                extra.append(pytest_html.extras.html(html))
+                    extra.append(pytest_html.extras.html(html))
         report.extra = extra
 
 
@@ -127,8 +130,9 @@ def capture_screenshot(case_name):
     global driver
     file_name = case_name.split("/")[-1]
     new_report_dir = new_report_time()
-    if new_report_dir is None:
+    if not new_report_dir:
         log.warn('没有初始化测试报告目录')
+        return False
     else:
         image_path = os.path.join(REPORT_DIR, new_report_dir, "image")
         image_file_path = os.path.join(REPORT_DIR, new_report_dir, "image", file_name)
@@ -150,11 +154,14 @@ def new_report_time():
     if is_report_path_exist is False:
         os.makedirs(REPORT_DIR)
     files = os.listdir(REPORT_DIR)
-    files.sort()
-    try:
-        return files[-1]
-    except IndexError:
-        return None
+    if len(files) < 1:
+        return False
+    else:
+        files.sort()
+        try:
+            return files[-1]
+        except IndexError:
+            return None
 
 
 @pytest.fixture(scope='session', autouse=True)

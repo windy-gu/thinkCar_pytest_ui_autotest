@@ -7,7 +7,7 @@
 import os
 
 
-def change_html(source_file_path: str, target_file_path: str):
+def change_html(source_file_path: str, target_file_path: str = None):
     """
     目前因为输出的html中，会彩色日志的形式，导致log中存在shell在控制台显示的代码
     此方法用于去除生成多余的代码，并生成新的文件，同时删除旧文件
@@ -20,15 +20,30 @@ def change_html(source_file_path: str, target_file_path: str):
         with open(target_file_path, mode='a+') as wf:
 
             for i in rf.readlines():
-                if '[' in i:
-                    i = i.strip()\
-                        .replace('[32m', '')\
-                        .replace('[0m', '')\
-                        .replace('[33m', '')\
-                        .replace('[31m', '')\
-                        .replace('[91m', '')
-                    wf.write(i)
-                    wf.write('<br>')
+                if ' - INFO - ' in i:
+                    i_front, i_back = i.split(' - INFO - ')
+                    wf.write(i_front + ' - INFO - ')
+                    wf.write('<span class="passed">')
+                    wf.write(i_back)
+                    wf.write('</span>')
+                elif ' - WARNING - ' in i:
+                    i_front, i_back = i.split(' - WARNING - ')
+                    wf.write(i_front + ' - WARNING - ')
+                    wf.write('<span class="skipped">')
+                    wf.write(i_back)
+                    wf.write('</span>')
+                elif ' - ERROR - ' in i:
+                    i_front, i_back = i.split(' - ERROR - ')
+                    wf.write(i_front + ' - ERROR - ')
+                    wf.write('<span class="error">')
+                    wf.write(i_back)
+                    wf.write('</span>')
+                elif ' - CRITICAL - ' in i:
+                    i_front, i_back = i.split(' - CRITICAL - ')
+                    wf.write(i_front + ' - CRITICAL - ')
+                    wf.write('<span class="error">')
+                    wf.write(i_back)
+                    wf.write('</span>')
                 else:
                     wf.write(i)
     # 删除文件
@@ -52,4 +67,3 @@ def str_transform_dict(temp_str: str) -> dict:
                 v = int(v)
         temp_dict[k] = v
     return temp_dict
-
