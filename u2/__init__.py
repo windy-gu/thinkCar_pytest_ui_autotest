@@ -491,8 +491,8 @@ class Element(object):
         """
         global driver
         print("\n")
-        log.info(message=" 键盘输入 ==> " + text)
         driver(**self.kwargs).set_text(text=text)
+        log.info(message="键盘输入 ==> " + text)
 
         if self.describe is not None:
             log.info("操作类型：{method_name}，定位_type：{k}， 定位_value：{v}， 描述：{describe}".

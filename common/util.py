@@ -20,32 +20,34 @@ def change_html(source_file_path: str, target_file_path: str = None):
         with open(target_file_path, mode='a+') as wf:
 
             for i in rf.readlines():
+                # 次数if 是为了避免前端html报告中存在error异常
+                if '<br/></div></td></tr></tbody></table></body></html>' in i:
+                    i_front, i_latest = i.split('<br/></div></td></tr></tbody></table></body></html>')
+                    i = i_front
+                    i_latest = '<br/></div></td></tr></tbody></table></body></html>'
+                # 绿色展示日志内容
                 if ' - INFO - ' in i:
+                    i = i.replace('\n', '')
                     i_front, i_back = i.split(' - INFO - ')
-                    wf.write(i_front + ' - INFO - ')
-                    wf.write('<span class="passed">')
-                    wf.write(i_back)
-                    wf.write('</span>')
+                    wf.write(i_front + ' - INFO - ' + '<span class="passed">' + i_back + '</span>' + '\n')
+                # 黄色展示日志内容
                 elif ' - WARNING - ' in i:
+                    i = i.replace('\n', '')
                     i_front, i_back = i.split(' - WARNING - ')
-                    wf.write(i_front + ' - WARNING - ')
-                    wf.write('<span class="skipped">')
-                    wf.write(i_back)
-                    wf.write('</span>')
+                    wf.write(i_front + ' - WARNING - ' + '<span class="skipped">' + i_back + '</span>' + '\n')
+                # 红色展示日志内容
                 elif ' - ERROR - ' in i:
+                    i = i.replace('\n', '')
                     i_front, i_back = i.split(' - ERROR - ')
-                    wf.write(i_front + ' - ERROR - ')
-                    wf.write('<span class="error">')
-                    wf.write(i_back)
-                    wf.write('</span>')
+                    wf.write(i_front + ' - ERROR - ' + '<span class="error">' + i_back + '</span>' + '\n')
+                # 红色展示日志内容
                 elif ' - CRITICAL - ' in i:
+                    i = i.replace('\n', '')
                     i_front, i_back = i.split(' - CRITICAL - ')
-                    wf.write(i_front + ' - CRITICAL - ')
-                    wf.write('<span class="error">')
-                    wf.write(i_back)
-                    wf.write('</span>')
+                    wf.write(i_front + ' - CRITICAL - ' + '<span class="error">' + i_back + '</span>' + '\n')
                 else:
                     wf.write(i)
+            wf.write(i_latest)
     # 删除文件
     os.remove(source_file_path)
 
