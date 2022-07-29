@@ -7,7 +7,6 @@ from functools import wraps
 from uiautomator2 import UiObject
 from driver import Device
 from time import sleep
-from common.logging import log
 from common.log import log
 from common.exceptions import ElementException
 from uiautomator2.exceptions import UiObjectNotFoundError, XPathElementNotFoundError
