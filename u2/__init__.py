@@ -324,13 +324,13 @@ class XpathElement(object):
 
         driver.xpath(self.xpath).click()
         if self.describe is not None:
-            log.info("操作类型：{method_name}，定位_type：{k}， 定位_value：{v}， 描述：{describe}".
+            log.info("操作类型：{method_name} [ 定位_type：{k}， 定位_value：{v}， 描述：{describe} ]".
                      format(k='xpath',
                             v=self.xpath,
                             method_name=sys._getframe().f_code.co_name,
                             describe=self.describe))
         else:
-            log.info("操作类型：{method_name}，定位_type：{k}， 定位_value：{v}".
+            log.info("操作类型：{method_name} [ 定位_type：{k}， 定位_value：{v} ]".
                      format(k='xpath',
                             v=self.xpath,
                             method_name=sys._getframe().f_code.co_name))
@@ -344,13 +344,13 @@ class XpathElement(object):
         default_ime = self.get_default_ime()
         driver.xpath(self.xpath).set_text(value)
         if self.describe is not None:
-            log.info("操作类型：{method_name}，定位_type：{k}， 定位_value：{v}， 描述：{describe}".
+            log.info("操作类型：{method_name} [ 定位_type：{k}， 定位_value：{v}， 描述：{describe} ]".
                      format(k='xpath',
                             v=self.xpath,
                             method_name=sys._getframe().f_code.co_name,
                             describe=self.describe))
         else:
-            log.info("操作类型：{method_name}，定位_type：{k}， 定位_value：{v}".
+            log.info("操作类型：{method_name} [ 定位_type：{k}， 定位_value：{v} ]".
                      format(k='xpath',
                             v=self.xpath,
                             method_name=sys._getframe().f_code.co_name))
@@ -427,17 +427,19 @@ class Element(object):
         global driver
         driver(**self.kwargs).click(timeout, offset)
 
-        if self.describe is not None:
-            log.info("操作类型：{method_name}，定位_type：{k}， 定位_value：{v}， 描述：{describe}".
+        if self.describe is None:
+
+            log.info("操作类型：{method_name} [ 定位_type：{k}， 定位_value：{v} ]".
+                     format(k=self.k,
+                            v=self.v,
+                            method_name=sys._getframe().f_code.co_name))
+        else:
+            log.info("操作类型：{method_name} [ 定位_type：{k}， 定位_value：{v}， 描述：{describe} ]".
                      format(k=self.k,
                             v=self.v,
                             method_name=sys._getframe().f_code.co_name,
                             describe=self.describe))
-        else:
-            log.info("操作类型：{method_name}，定位_type：{k}， 定位_value：{v}".
-                     format(k=self.k,
-                            v=self.v,
-                            method_name=sys._getframe().f_code.co_name))
+
 
     def click_exists(self, timeout=1) -> bool:
         """
@@ -494,17 +496,17 @@ class Element(object):
         driver(**self.kwargs).set_text(text=text)
         log.info(message="键盘输入 ==> " + text)
 
-        if self.describe is not None:
-            log.info("操作类型：{method_name}，定位_type：{k}， 定位_value：{v}， 描述：{describe}".
+        if self.describe is None:
+            log.info("操作类型：{method_name} [ 定位_type：{k}， 定位_value：{v} ]".
+                     format(k=self.k,
+                            v=self.v,
+                            method_name=sys._getframe().f_code.co_name))
+        else:
+            log.info("操作类型：{method_name} [ 定位_type：{k}， 定位_value：{v}， 描述：{describe} ]".
                      format(k=self.k,
                             v=self.v,
                             method_name=sys._getframe().f_code.co_name,
                             describe=self.describe))
-        else:
-            log.info("操作类型：{method_name}，定位_type：{k}， 定位_value：{v}".
-                     format(k=self.k,
-                            v=self.v,
-                            method_name=sys._getframe().f_code.co_name))
 
     def send_keys(self, text, clear=True):
         """
@@ -517,13 +519,13 @@ class Element(object):
         driver.send_keys(text=text, clear=clear)
 
         if self.describe is not None:
-            log.info("操作类型：{method_name}，定位_type：{k}， 定位_value：{v}， 描述：{describe}".
+            log.info("操作类型：{method_name} [ 定位_type：{k}， 定位_value：{v}， 描述：{describe} ]".
                      format(k=self.k,
                             v=self.v,
                             method_name=sys._getframe().f_code.co_name,
                             describe=self.describe))
         else:
-            log.info("操作类型：{method_name}，定位_type：{k}， 定位_value：{v}".
+            log.info("操作类型：{method_name} [ 定位_type：{k}， 定位_value：{v} ]".
                      format(k=self.k,
                             v=self.v,
                             method_name=sys._getframe().f_code.co_name))
@@ -535,13 +537,13 @@ class Element(object):
         global driver
         driver(**self.kwargs).clear()
         if self.describe is not None:
-            log.info("操作类型：{method_name}，定位_type：{k}， 定位_value：{v}， 描述：{describe}".
+            log.info("操作类型：{method_name} [ 定位_type：{k}， 定位_value：{v}， 描述：{describe} ]".
                      format(k=self.k,
                             v=self.v,
                             method_name=sys._getframe().f_code.co_name,
                             describe=self.describe))
         else:
-            log.info("操作类型：{method_name}，定位_type：{k}， 定位_value：{v}".
+            log.info("操作类型：{method_name} [ 定位_type：{k}， 定位_value：{v} ]".
                      format(k=self.k,
                             v=self.v,
                             method_name=sys._getframe().f_code.co_name))
@@ -553,14 +555,14 @@ class Element(object):
         global driver
         get_text = driver(**self.kwargs).get_text()
         if self.describe is not None:
-            log.info("操作类型：{method_name}，文本内容：{get_text} [ 定位_type：{k}， 定位_value：{v}， 描述：{describe} ]".
+            log.info("操作类型：{method_name}，获取元素文本内容：{get_text} [ 定位_type：{k}， 定位_value：{v}， 描述：{describe} ]".
                      format(k=self.k,
                             v=self.v,
                             get_text=get_text,
                             method_name=sys._getframe().f_code.co_name,
                             describe=self.describe))
         else:
-            log.info("操作类型：{method_name}，文本内容：{get_text} [ 定位_type：{k}， 定位_value：{v} ]".
+            log.info("操作类型：{method_name}，获取元素文本内容：{get_text} [ 定位_type：{k}， 定位_value：{v} ]".
                      format(k=self.k,
                             v=self.v,
                             get_text=get_text,
