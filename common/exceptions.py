@@ -74,6 +74,13 @@ class ElementException(PoiumException):
 
 class ElementNoFindException(PoiumException):
     """
-    Element exception
+    Element no find exception
+    """
+    pass
+
+
+class AssertNoEqualException(PoiumException):
+    """
+    Assert no equal exception
     """
     pass

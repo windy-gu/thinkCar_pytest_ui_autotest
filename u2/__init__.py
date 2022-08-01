@@ -9,6 +9,7 @@ import time
 from settings import Setting
 from common.log import log
 from common.assert_des import insert_assert
+from common.exceptions import AssertNoEqualException
 
 
 # u2定位支持类型
@@ -139,7 +140,7 @@ class Page(object):
             log.info("实际结果：" + describe + " 文案存在")
         else:
             insert_assert(describe, False)
-            log.warning("实际结果：" + describe + " 文案不存在")
+            log.warn("实际结果：" + describe + " 文案不存在")
 
     def assert_text_not_exists(self, text, describe, sleep=0, timeout=10):
         """
@@ -157,7 +158,7 @@ class Page(object):
         log.info("预期结果: " + describe + " 文案不存在")
         if text_exists is True:
             insert_assert(describe, False)
-            log.warning("实际结果: " + describe + " 文案存在")
+            log.warn("实际结果: " + describe + " 文案存在")
         else:
             insert_assert(describe, True)
             log.info("实际结果: " + describe + " 文案不存在")
@@ -180,7 +181,7 @@ class Page(object):
             log.info("实际结果：" + describe + " 元素存在")
         else:
             insert_assert(describe, False)
-            log.warning("实际结果：" + describe + " 元素不存在")
+            log.warn("实际结果：" + describe + " 元素不存在")
 
     def assert_element_not_exists(self, element, describe, sleep=0, timeout=10):
         """
@@ -198,7 +199,7 @@ class Page(object):
         log.info("预期结果: " + describe + " 元素不存在")
         if element_exists is True:
             insert_assert(describe, False)
-            log.warning("实际结果: " + describe + " 元素存在")
+            log.warn("实际结果: " + describe + " 元素存在")
         else:
             insert_assert(describe, True)
             log.info("实际结果: " + describe + " 元素不存在")
@@ -223,7 +224,7 @@ class Page(object):
         else:
             result = [describe, False]
             Setting.assert_result.append(result)
-            log.warning("实际结果：" + describe + " 文案不存在")
+            log.warn("实际结果：" + describe + " 文案不存在")
 
     def assert_not_contain_text(self, text, describe, sleep=0, timeout=10):
         """
@@ -246,7 +247,7 @@ class Page(object):
         else:
             result = [describe, True]
             Setting.assert_result.append(result)
-            log.warning("实际结果：" + describe + " 文案不存在")
+            log.warn("实际结果：" + describe + " 文案不存在")
 
     @staticmethod
     def assert_text_equals(text_1, text_2, describe):
@@ -265,7 +266,8 @@ class Page(object):
         else:
             result = [describe, False]
             Setting.assert_result.append(result)
-            log.warning("实际结果: " + text_1 + "," + text_2 + " 不相等")
+            log.warn("实际结果: " + text_1 + "," + text_2 + " 不相等")
+            raise AssertNoEqualException("实际结果: " + text_1 + "," + text_2 + " 不相等")
 
     @staticmethod
     def assert_text_not_equals(text_1, text_2, describe):
@@ -280,7 +282,7 @@ class Page(object):
         if text_1 == text_2:
             result = [describe, False]
             Setting.assert_result.append(result)
-            log.warning("实际结果: " + text_1 + "," + text_2 + " 相等")
+            log.warn("实际结果: " + text_1 + "," + text_2 + " 相等")
         else:
             result = [describe, True]
             Setting.assert_result.append(result)
