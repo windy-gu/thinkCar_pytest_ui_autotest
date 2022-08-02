@@ -47,7 +47,9 @@ BASE_DIR = os.path.abspath(os.path.dirname(current_path) + os.path.sep + "..")
 
 
 class Page(object):
-
+    """
+    所有element-page的父类，需要在实例化的时候传入u2_driver
+    """
     def __init__(self, driver):
         self.driver = driver
 

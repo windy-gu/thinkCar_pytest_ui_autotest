@@ -6,10 +6,10 @@
 
 import os
 import pytest
+from u2 import Element
+from common.log import log
 from u2.driver import Device
 from u2.adb_command import ADB
-from common.log import log
-from u2 import Element
 from common.util import str_transform_dict
 from common.exceptions import ElementNoFindException
 from page.thinktool_lite_page import HomePage, DiagHomePage, InputMethodPage, CommandPage, LoginPage, SettingsPage
