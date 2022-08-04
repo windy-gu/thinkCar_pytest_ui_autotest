@@ -16,7 +16,7 @@ def change_html(source_file_path: str, target_file_path: str = None):
     :return:
     """
     with open(source_file_path, encoding='utf-8', mode='r') as rf:
-        with open(target_file_path, mode='a+') as wf:
+        with open(target_file_path, encoding='utf-8', mode='a+') as wf:
 
             for i in rf.readlines():
                 # 次数if 是为了避免前端html报告中存在error异常

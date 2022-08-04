@@ -6,8 +6,11 @@
 
 import os
 import datetime
+import platform
 current_path = os.path.abspath(__file__)  # 获取当前文件目录和文件名
 BASE_DIR = os.path.abspath(os.path.dirname(current_path) + os.path.sep)  # 获取当前文件目录所在路径
+
+
 
 
 class Setting:
@@ -42,11 +45,33 @@ class Setting:
     # 设置首页加载完成等待时间
     loading_finish = 10
 
-    # adb工程文件路径
-    adb_path = BASE_DIR + '/adb_util/adb'
+    """
+        返回到当前系统运行的系统，
+        win系统 return windows
+        mac系统 return Darwin
+        linux系统 return linux
+        """
+    run_system = platform.system()
+    if run_system == 'Darwin':
+        # adb工程文件路径
+        adb_path = BASE_DIR + '/adb_util/mac/adb'
+        # aapt工程文件路径
+        aapt_path = BASE_DIR + '/adb_util/mac/aapt'
 
-    # aapt工程文件路径
-    aapt_path = BASE_DIR + '/adb_util/aapt'
+    elif run_system == 'windows':
+        # adb工程文件路径
+        adb_path = BASE_DIR + '/adb_util/win/adb'
+        # aapt工程文件路径
+        aapt_path = BASE_DIR + '/adb_util/win/aapt'
+
+    elif run_system == 'linux':
+        # adb工程文件路径
+        adb_path = BASE_DIR + '/adb_util/linux/adb'
+        # aapt工程文件路径
+        aapt_path = BASE_DIR + '/adb_util/linux/aapt'
+
+    else:
+        raise Exception('执行系统不在指定范围内')
 
     # 执行过程中image存放路径
     image_path = ''
