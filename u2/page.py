@@ -5,6 +5,7 @@
 # @File    : page.py
 
 from driver import Device
+# 当前页面的内容，暂时未在工程中调用和实现
 
 
 class Page:

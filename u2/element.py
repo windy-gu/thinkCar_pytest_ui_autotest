@@ -11,6 +11,8 @@ from common.log import log
 from common.exceptions import ElementException
 from uiautomator2.exceptions import UiObjectNotFoundError, XPathElementNotFoundError
 
+# 当前页面的内容，暂时未在工程中调用和实现
+
 
 class Locator(dict):
     ...

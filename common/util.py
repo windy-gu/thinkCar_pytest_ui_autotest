@@ -9,8 +9,7 @@ import os
 
 def change_html(source_file_path: str, target_file_path: str = None):
     """
-    目前因为输出的html中，会彩色日志的形式，导致log中存在shell在控制台显示的代码
-    此方法用于去除生成多余的代码，并生成新的文件，同时删除旧文件
+    将html报告中日志输出颜色跟控制保持一致
 
     :param source_file_path:
     :param target_file_path:

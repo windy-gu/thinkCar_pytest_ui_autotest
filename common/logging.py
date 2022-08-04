@@ -9,6 +9,7 @@ import sys
 import time
 from loguru import logger
 import config
+# 最先实现的log日志方法，但在pytest中无法实现控制台的实时日志输入
 
 
 class Logger:

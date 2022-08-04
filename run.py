@@ -39,6 +39,7 @@ def init_report_path(report_file_dir: str):
 @click.command()
 @click.option('-m', default=None, help='Input run model：run or debug')
 def run(m):
+    # 测试的主测试入口
     if m is None or m == 'run':
         log.info("回归模式，开始执行！")
         now_time = time.strftime("%Y_%m_%d_%H_%M_%S")
@@ -60,6 +61,7 @@ def run(m):
         change_html(html_report, target_html_report)  # 修改html中存在的异常代码，并删除旧文件
 
     elif m == "debug":
+        # debug模式下，不生成HTML报告
         log.info("debug模式，开始执行！")
         pytest.main(["-v", "-s", cases_path])
         log.info("运行结束！")

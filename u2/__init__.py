@@ -293,7 +293,7 @@ class Page(object):
 
 class XpathElement(object):
     """
-        Only CSS selectors are supported.
+        Only CSS selectors are supported. | xpath方式实现的定位的父类
         https://github.com/openatx/uiautomator2/blob/master/XPATH.md
 
         >> from sabre import Page, XpathElement
@@ -430,7 +430,6 @@ class Element(object):
         """
         global driver
         driver(**self.kwargs).click(timeout, offset)
-
         if self.describe is None:
 
             log.info("操作类型：{method_name} [ 定位_type：{k}， 定位_value：{v} ]".
@@ -443,7 +442,6 @@ class Element(object):
                             v=self.v,
                             method_name=sys._getframe().f_code.co_name,
                             describe=self.describe))
-
 
     def click_exists(self, timeout=1) -> bool:
         """
@@ -496,7 +494,6 @@ class Element(object):
         :param text:
         """
         global driver
-        print("\n")
         driver(**self.kwargs).set_text(text=text)
         log.info(message="键盘输入 ==> " + text)
 
