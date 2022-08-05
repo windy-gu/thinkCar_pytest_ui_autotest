@@ -60,9 +60,9 @@ class Setting:
 
     elif run_system == 'windows':
         # adb工程文件路径
-        adb_path = BASE_DIR + '/adb_util/win/adb'
+        adb_path = BASE_DIR + '/adb_util/win/adb.exe'
         # aapt工程文件路径
-        aapt_path = BASE_DIR + '/adb_util/win/aapt'
+        aapt_path = BASE_DIR + '/adb_util/win/aapt.exe'
 
     elif run_system == 'linux':
         # adb工程文件路径
