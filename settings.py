@@ -11,8 +11,6 @@ current_path = os.path.abspath(__file__)  # 获取当前文件目录和文件名
 BASE_DIR = os.path.abspath(os.path.dirname(current_path) + os.path.sep)  # 获取当前文件目录所在路径
 
 
-
-
 class Setting:
 
     # 是否通过usb链接设备
@@ -79,5 +77,3 @@ class Setting:
 
 if __name__ == '__main__':
     print(datetime.datetime.now().strftime('%Y/%m/%d-%H:%M:%S'))
-    # print(BASE_DIR)
-    # print(current_path)
