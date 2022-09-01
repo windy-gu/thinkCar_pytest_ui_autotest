@@ -6,6 +6,7 @@
 
 import os
 import pytest
+from datetime import datetime
 from py.xml import html
 from common.log import log
 from settings import Setting
@@ -41,16 +42,18 @@ cases_path = "./test_dir/"
 ############################
 
 
-# 设置用例描述表头
+# 设置用例执行开始时间和用例描述表头
 @pytest.mark.optionalhook
 def pytest_html_results_table_header(cells):
+    cells.insert(1, html.th('TestCase Start Time'))
     cells.insert(2, html.th('Description'))
     cells.pop()
 
 
-# 设置用例描述表格
+# 设置用例执行开始时间和用例描述表格
 @pytest.mark.optionalhook
 def pytest_html_results_table_row(report, cells):
+    cells.insert(1, html.td(datetime.now(), class_="col-time"))
     cells.insert(2, html.td(report.description))
     cells.pop()
 

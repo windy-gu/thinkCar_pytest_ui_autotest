@@ -24,27 +24,31 @@ def change_html(source_file_path: str, target_file_path: str = None):
                     i_front, i_latest = i.split('<br/></div></td></tr></tbody></table></body></html>')
                     i = i_front
                     i_latest = '<br/></div></td></tr></tbody></table></body></html>'
-                # 绿色展示日志内容
-                if ' - INFO - ' in i:
-                    i = i.replace('\n', '')
-                    i_front, i_back = i.split(' - INFO - ')
-                    wf.write(i_front + ' - INFO - ' + '<span class="passed">' + i_back + '</span>' + '\n')
-                # 黄色展示日志内容
-                elif ' - WARNING - ' in i:
-                    i = i.replace('\n', '')
-                    i_front, i_back = i.split(' - WARNING - ')
-                    wf.write(i_front + ' - WARNING - ' + '<span class="skipped">' + i_back + '</span>' + '\n')
-                # 红色展示日志内容
-                elif ' - ERROR - ' in i:
-                    i = i.replace('\n', '')
-                    i_front, i_back = i.split(' - ERROR - ')
-                    wf.write(i_front + ' - ERROR - ' + '<span class="error">' + i_back + '</span>' + '\n')
-                # 红色展示日志内容
-                elif ' - CRITICAL - ' in i:
-                    i = i.replace('\n', '')
-                    i_front, i_back = i.split(' - CRITICAL - ')
-                    wf.write(i_front + ' - CRITICAL - ' + '<span class="error">' + i_back + '</span>' + '\n')
-                else:
+                try:
+                    # 绿色展示日志内容
+                    if ' - INFO - ' in i:
+                        i = i.replace('\n', '')
+                        i_front, i_back = i.split(' - INFO - ')
+                        wf.write(i_front + ' - INFO - ' + '<span class="passed">' + i_back + '</span>' + '\n')
+                    # 黄色展示日志内容
+                    elif ' - WARNING - ' in i:
+                        i = i.replace('\n', '')
+                        i_front, i_back = i.split(' - WARNING - ')
+                        wf.write(i_front + ' - WARNING - ' + '<span class="skipped">' + i_back + '</span>' + '\n')
+                    # 红色展示日志内容
+                    elif ' - ERROR - ' in i:
+                        i = i.replace('\n', '')
+                        i_front, i_back = i.split(' - ERROR - ')
+                        wf.write(i_front + ' - ERROR - ' + '<span class="error">' + i_back + '</span>' + '\n')
+                    # 红色展示日志内容
+                    elif ' - CRITICAL - ' in i:
+                        i = i.replace('\n', '')
+                        i_front, i_back = i.split(' - CRITICAL - ')
+                        wf.write(i_front + ' - CRITICAL - ' + '<span class="error">' + i_back + '</span>' + '\n')
+                    else:
+                        wf.write(i)
+                except ValueError as e:
+                    # 这里处理分割异常时，将原本默认的内容添加上去避免报错 --todo
                     wf.write(i)
             wf.write(i_latest)
     # 删除文件
